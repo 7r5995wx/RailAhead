@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#061d2e" />
+    <title>RailAhead — Indian Railways departures</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Playfair+Display:ital,wght@0,650;1,650&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="enhancements.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <nav><a class="brand" href="#top"><span class="brand-mark">↗</span> RailAhead</a><span class="nav-note">Indian Railways · live departures</span></nav>
+      <section class="hero" id="top">
+        <p class="eyebrow">Your platform, right now</p>
+        <h1>Catch the train<br /><em>that is still coming.</em></h1>
+        <p class="intro">See every train from your station to your destination — including delayed services that have not passed you yet.</p>
+      </section>
+
+      <section class="search-card" aria-label="Find trains">
+        <div class="route-fields">
+          <label>From station<input id="from" list="stations" value="New Delhi (NDLS)" autocomplete="off" /></label>
+          <button class="swap" id="swap" aria-label="Swap stations">⇄</button>
+          <label>To station<input id="to" list="stations" value="Kanpur Central (CNB)" autocomplete="off" /></label>
+          <datalist id="stations">
+            <option>New Delhi (NDLS)</option><option>Patna Junction (PNBE)</option><option>Kanpur Central (CNB)</option><option>Prayagraj Junction (PRYJ)</option><option>Lucknow (LKO)</option><option>Howrah Junction (HWH)</option><option>Mumbai Central (MMCT)</option><option>Chennai Central (MAS)</option><option>Bengaluru (SBC)</option>
+          </datalist>
+        </div>
+        <div class="search-footer"><button class="location" id="locate" type="button">⌖ Use my current station</button><button class="primary" id="search">Show trains <span>→</span></button></div>
+        <p class="location-feedback" id="location-feedback" hidden></p>
+      </section>
+
+      <section class="results" id="results" aria-live="polite">
+        <div class="results-head"><div><p class="eyebrow">Live board</p><h2 id="route-title">New Delhi <span>→</span> Kanpur Central</h2></div><div class="updated"><span class="live-dot"></span><span id="updated">Updated just now</span></div></div>
+        <div class="summary"><strong id="count">4</strong><span>trains you can still catch today</span><button id="refresh">Refresh</button></div>
+        <div class="notice"><span>✦</span><p><b>Late trains are included.</b> A service remains here until its actual departure from your station is recorded.</p></div>
+        <div id="train-list" class="train-list"></div>
+      </section>
+      <section class="how"><div><p class="eyebrow">How it works</p><h2>Schedules are useful.<br />Actual departures are better.</h2></div><p>RailAhead combines the route timetable with live running status. A train is only removed once it has actually departed your station, not when its scheduled time passes.</p></section>
+      <footer>Built for the last-minute platform decision <span>·</span> Data provider connection required for live service</footer>
+    </main>
+    <template id="train-template"><article class="train"><div class="train-top"><div><p class="number"></p><h3></h3></div><span class="badge"></span></div><div class="timing"><div><span>Expected departure</span><strong class="departure"></strong><small class="scheduled"></small></div><div class="line"><i></i></div><div><span>Arrives at destination</span><strong class="arrival"></strong><small class="duration"></small></div></div><div class="train-bottom"><span class="platform"></span><span class="status"></span><button class="details">Details →</button></div></article></template>
+    <script src="app.js"></script>
+  </body>
+</html>
