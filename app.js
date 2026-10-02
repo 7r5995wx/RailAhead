@@ -1,9 +1,3 @@
-const demoTrains = [
-  { no: "12424", name: "Dibrugarh Rajdhani", departure: "18:05", arrival: "23:35", scheduled: "Scheduled 18:05", duration: "5h 30m · Direct", platform: "Platform 3", status: "On time", kind: "on-time" },
-  { no: "12310", name: "Rajendra Nagar Rajdhani", departure: "18:42", arrival: "00:12", scheduled: "Scheduled 18:15", duration: "5h 30m · Direct", platform: "Platform 4", status: "27 min late", kind: "late" },
-  { no: "12033", name: "Kanpur Shatabdi", departure: "19:10", arrival: "23:50", scheduled: "Scheduled 19:10", duration: "4h 40m · Direct", platform: "Platform 1", status: "On time", kind: "on-time" },
-  { no: "22436", name: "Vande Bharat Express", departure: "20:00", arrival: "23:55", scheduled: "Scheduled 20:00", duration: "3h 55m · Direct", platform: "Platform TBA", status: "On time", kind: "on-time" }
-];
 const stations = [
   { name: "New Delhi", code: "NDLS", lat: 28.6431, lng: 77.2197 }, { name: "Patna Junction", code: "PNBE", lat: 25.6093, lng: 85.1376 }, { name: "Kanpur Central", code: "CNB", lat: 26.4520, lng: 80.3319 },
   { name: "Prayagraj Junction", code: "PRYJ", lat: 25.4358, lng: 81.8463 }, { name: "Lucknow", code: "LKO", lat: 26.8380, lng: 80.9231 },
@@ -11,8 +5,13 @@ const stations = [
   { name: "Chennai Central", code: "MAS", lat: 13.0825, lng: 80.2757 }, { name: "KSR Bengaluru", code: "SBC", lat: 12.9767, lng: 77.5713 }
 ];
 const list = document.querySelector("#train-list");
-function render(data = demoTrains) {
+function render(data = []) {
   list.innerHTML = "";
+  if (!data || data.length === 0) {
+    list.innerHTML = `<div class="train" style="text-align: center; color: var(--muted); padding: 30px;"><p style="margin: 0; font-size: 15px;">No live trains available for this route.</p></div>`;
+    document.querySelector("#count").textContent = 0;
+    return;
+  }
   data.forEach(train => {
     const node = document.querySelector("#train-template").content.cloneNode(true);
     node.querySelector(".number").textContent = train.no;
@@ -73,13 +72,13 @@ async function search() {
   button.disabled = true; button.textContent = "Finding live trains…";
   try {
     const result = await fetch(`/api/trains?from=${encodeURIComponent(stationCode(document.querySelector("#from").value))}&to=${encodeURIComponent(stationCode(document.querySelector("#to").value))}`);
-    if (!result.ok) throw new Error();
     const data = await result.json();
+    if (!result.ok) throw new Error(data?.error || "Could not retrieve live trains.");
     render(normalize(data.trains));
     document.querySelector("#updated").textContent = `Updated ${indianTime(data.updatedAt)} IST`;
-  } catch {
-    render(demoTrains);
-    document.querySelector("#updated").textContent = "Demo data · add provider key for live status";
+  } catch (err) {
+    render([]);
+    document.querySelector("#updated").textContent = err.message || "Live data unavailable";
   } finally { button.disabled = false; button.innerHTML = "Show trains <span>→</span>"; }
   document.querySelector("#results").scrollIntoView({ behavior: "smooth", block: "start" });
 }

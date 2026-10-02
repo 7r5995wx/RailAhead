@@ -15,7 +15,7 @@ cd /Users/vishalkumar/Desktop/RailAhead
 python3 dev_server.py
 ```
 
-Open http://localhost:4173. Create a local `.env` file with `RAILRADAR_API_KEY=your_key` (it is ignored by Git). Without an API key, searches display demo data rather than a static-server 404.
+Open http://localhost:4173. Create a local `.env` file with `RAILRADAR_API_KEY=your_key` (it is ignored by Git).
 
 ### Vercel deployment
 
@@ -23,7 +23,7 @@ Open http://localhost:4173. Create a local `.env` file with `RAILRADAR_API_KEY=y
 2. In Vercel's environment-variable settings, add `RAILRADAR_API_KEY` (see `.env.example`).
 3. Deploy. The browser calls the protected `/api/trains` endpoint; the provider key never reaches it.
 
-Without the key, the UI remains usable in demo mode. The production endpoint requests RailRadar's `trains/between` endpoint with `live=true`, caches replies for one minute, and filters `departed`, `cancelled`, and `skipped` services.
+The production endpoint requests RailRadar's `trains/between` endpoint with `live=true`, caches replies for one minute, and filters `departed`, `cancelled`, and `skipped` services.
 
 The current-station control asks for browser location only when tapped and calculates the nearest result locally. It currently has a starter directory of major stations; replace that directory with the provider's complete station data before launch.
 
